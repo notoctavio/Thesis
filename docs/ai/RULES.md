@@ -32,13 +32,23 @@ When repository structure, workflow, or data inventory changes, update:
 - `docs/ai/RULES.md` first
 - Root adapters (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) only if needed
 - Relevant folder `README.md` files (`data/README.md`, `data_test/README.md`)
+- `docs/ai/PREFERENCES.md` if a stable collaboration preference is discovered
+- `docs/ai/LESSONS_LEARNED.md` if a recurring mistake/pitfall is identified
+- Relevant planning docs in `docs/plan/`
 
 ## Automation Baseline
 - Integrity script: `scripts/validate_repo_integrity.py`
 - CI workflow: `.github/workflows/repo-integrity.yml`
 - Issue template: `.github/ISSUE_TEMPLATE/project-task.yml`
+- Progress tracking: GitHub Issues (milestone `Thesis - End of May`) + narrative logs in `docs/plan/`
 
 ## Skills Focus (for assistants)
 - Dataset integrity checks (raw vs cleaned consistency)
 - Reproducible preprocessing and feature engineering
 - Clear experiment organization for thesis reporting
+
+## Continuous Improvement Loop
+After each meaningful task:
+1. Capture reusable user collaboration preferences in `docs/ai/PREFERENCES.md`.
+2. Capture mistakes and prevention rules in `docs/ai/LESSONS_LEARNED.md`.
+3. Reflect execution progress in `docs/plan/` files.
