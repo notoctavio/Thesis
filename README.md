@@ -15,6 +15,7 @@ To keep instructions consistent across assistants:
 
 ## Lightweight Automation
 - Local integrity command: `python3 scripts/validate_repo_integrity.py`
+- CI uses `VALIDATE_DATASETS=0` so cloud checks validate repo wiring/docs without requiring local datasets.
 - CI workflow: `.github/workflows/repo-integrity.yml` (runs on push and pull request)
 - Task template: `.github/ISSUE_TEMPLATE/project-task.yml`
 
