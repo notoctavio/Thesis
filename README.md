@@ -17,6 +17,7 @@ To keep instructions consistent across assistants:
 - Local integrity command: `python3 scripts/validate_repo_integrity.py`
 - CI uses `VALIDATE_DATASETS=0` so cloud checks validate repo wiring/docs without requiring local datasets.
 - CI workflow: `.github/workflows/repo-integrity.yml` (runs on push and pull request)
+- PR auto-assign workflow: `.github/workflows/auto-assign-pr-author.yml` (assigns PR opener automatically)
 - Task template: `.github/ISSUE_TEMPLATE/project-task.yml`
 
 ## Git Hygiene
