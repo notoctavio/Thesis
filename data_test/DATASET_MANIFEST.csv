@@ -1,0 +1,5 @@
+dataset_id,source,location,format,scope,license_or_terms,notes
+nasa-original-zips,NASA PCoE,data_test/Raw Datasets/Nasa website datasets/5. Battery Data Set,.zip,raw source,Check NASA source terms,Official upstream archives
+nasa-extracted-5-56,Derived from NASA zips,data_test/Raw Datasets/Datasets raw 5-56/battery_dataset,.mat,raw extracted,Check NASA source terms,Expanded groups for batteries B0005-B0056
+kaggle-mat-5-18,Kaggle,data_test/Raw Datasets/Mat datasets 5-18/results,.mat/.zip,subset and artifacts,Check Kaggle dataset license,Overlaps B0005/B0006/B0007/B0018
+cleaned-5-56,Preprocessed dataset,data_test/Cleaned Datasets/Datasets 5-56 cleaned/cleaned_dataset,.csv,cleaned cycle-level data,Internal preprocessing output,metadata.csv indexes all cycle files
