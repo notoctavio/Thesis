@@ -31,5 +31,11 @@ If you only want to preview what would be created:
 python3 scripts/plan_csv_to_github_issues.py --dry-run
 ```
 
+## Weekly logs
+Create a weekly log file when you do meaningful work. Suggested naming:
+- `docs/plan/weekly-YYYY-Www.md` (example: `docs/plan/weekly-2026-W11.md`)
+
+Use `weekly-log-template.md` as the template and link the relevant GitHub issues/PRs.
+
 ## Usage rule
 When a new sprint/phase starts, update `thesis-roadmap.md` first, then log execution details in weekly logs and close the relevant GitHub issues.

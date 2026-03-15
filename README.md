@@ -22,6 +22,14 @@ To keep instructions consistent across assistants:
   - `docs/ai/LESSONS_LEARNED.md`
 - When workflow, structure, or data inventory changes, update `docs/ai/RULES.md` first, then related adapter/README files if needed.
 
+## Workflow (recommended)
+This repo follows an **Issues-first** workflow for thesis execution.
+
+- Track tasks in GitHub Issues (milestone `Thesis - End of May`)
+- Use the Project dashboard for a board/table view: https://github.com/users/notoctavio/projects/2
+- Work on a branch → open a PR → ensure required checks pass → merge
+- Log weekly progress + decisions in `docs/plan/`
+
 ## Lightweight Automation
 - Local integrity command: `python3 scripts/validate_repo_integrity.py`
 - CI uses `VALIDATE_DATASETS=0` so cloud checks validate repo wiring/docs without requiring local datasets.

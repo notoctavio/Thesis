@@ -14,6 +14,7 @@
 - [ ] Updated `docs/ai/PREFERENCES.md` if a new recurring preference was identified
 - [ ] Updated `docs/ai/LESSONS_LEARNED.md` if a new recurring mistake pattern was identified
 - [ ] Updated relevant `docs/plan/*` files for planning/progress
+- [ ] Linked the relevant GitHub Issue(s) and ensured the Project board is consistent
 
 ## Notes
 - 

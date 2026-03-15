@@ -27,14 +27,36 @@ Root adapter files (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) should st
 3. Keep work reproducible and thesis-grade (clear logic, traceable steps, explicit assumptions).
 4. Prefer Python 3.x with `pandas`, `numpy`, `scipy`; use `pytorch` for deep learning unless changed explicitly.
 
-## Documentation Maintenance Rule
-When repository structure, workflow, or data inventory changes, update:
-- `docs/ai/RULES.md` first
-- Root adapters (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) only if needed
-- Relevant folder `README.md` files (`data/README.md`, `data_test/README.md`)
-- `docs/ai/PREFERENCES.md` if a stable collaboration preference is discovered
-- `docs/ai/LESSONS_LEARNED.md` if a recurring mistake/pitfall is identified
-- Relevant planning docs in `docs/plan/`
+## Workflow (must follow)
+1. Pick or create the next task as a GitHub Issue (label it `thesis` + `phase:*`, assign the milestone).
+2. Move it on the Project board: https://github.com/users/notoctavio/projects/2
+3. Work on a branch.
+4. Open a PR; ensure required checks pass.
+5. Merge the PR.
+6. Reflect progress:
+   - Weekly log: `docs/plan/*`
+   - Decision log when needed: `docs/plan/decision-log.md`
+
+## Documentation Maintenance Rule (agents must do this)
+When you change repository structure, workflow, automation, or data inventory, you must proactively update the docs **in the same PR**.
+
+Update order:
+- `docs/ai/RULES.md` first (canonical)
+- Root adapters (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) only if the pointer/compatibility needs changes
+- User-facing docs:
+  - `README.md` (high-level workflow/navigation)
+  - Relevant folder READMEs (`data/README.md`, `data_test/README.md`) when their contents/meaning changes
+- Process logs:
+  - `docs/plan/*` (weekly logs / roadmap updates / decision log)
+- Collaboration memory:
+  - `docs/ai/PREFERENCES.md` for stable preferences
+  - `docs/ai/LESSONS_LEARNED.md` for recurring pitfalls
+
+## Minimal doc update checklist (for every PR)
+- If behavior/workflow changed: update `docs/ai/RULES.md` + `README.md`
+- If you learned a repeatable preference: update `docs/ai/PREFERENCES.md`
+- If you hit a recurring mistake: update `docs/ai/LESSONS_LEARNED.md`
+- If work completed a milestone chunk: update `docs/plan/*` (weekly log/roadmap)
 
 ## Automation Baseline
 - Integrity script: `scripts/validate_repo_integrity.py`
