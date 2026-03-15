@@ -3,9 +3,11 @@
 Thanks for contributing to this thesis repository.
 
 ## Workflow
+- Track work as GitHub Issues (milestone `Thesis - End of May`) and use the dashboard: https://github.com/users/notoctavio/projects/2
 - Create or use a feature branch (do not push directly to `main`).
 - Open a pull request with a clear summary and validation notes.
-- Ensure GitHub checks pass before merge.
+- Ensure required GitHub checks pass before merge.
+- Log weekly progress in `docs/plan/` and record major decisions in `docs/plan/decision-log.md`.
 
 ## Required checks before PR
 - Run local integrity checks:
