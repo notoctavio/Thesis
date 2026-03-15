@@ -10,6 +10,7 @@ To keep instructions consistent across assistants:
 
 - Canonical rules live in `docs/ai/RULES.md`.
 - Root adapter files (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) are intentionally thin and point to the canonical file.
+- Codex project MCP configuration lives in `.codex/config.toml`.
 - When workflow, structure, or data inventory changes, update `docs/ai/RULES.md` first, then related adapter/README files if needed.
 
 ## Lightweight Automation
