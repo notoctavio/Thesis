@@ -40,6 +40,7 @@ When repository structure, workflow, or data inventory changes, update:
 - Integrity script: `scripts/validate_repo_integrity.py`
 - CI workflow: `.github/workflows/repo-integrity.yml`
 - Issue template: `.github/ISSUE_TEMPLATE/project-task.yml`
+- Progress tracking: GitHub Issues (milestone `Thesis - End of May`) + narrative logs in `docs/plan/`
 
 ## Skills Focus (for assistants)
 - Dataset integrity checks (raw vs cleaned consistency)
