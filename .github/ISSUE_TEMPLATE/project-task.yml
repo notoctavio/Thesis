@@ -1,0 +1,57 @@
+name: Project Task
+description: Track a concrete repository task with scope, acceptance criteria, and documentation updates.
+title: "[Task] "
+labels:
+  - task
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What problem are we solving and why now?
+      placeholder: Brief background and motivation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is in scope and out of scope?
+      placeholder: Include explicit boundaries.
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Plan
+      description: List planned changes (files/folders/components).
+      placeholder: "- Update ...\n- Add ...\n- Validate ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this task is done?
+      placeholder: "- [ ] Criterion 1\n- [ ] Criterion 2"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: docs
+    attributes:
+      label: Documentation Updates
+      options:
+        - label: I will update `docs/ai/RULES.md` if workflow/structure/rules change.
+        - label: I will update relevant adapter files (`AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `CODEX.md`) if needed.
+        - label: I will update relevant README files when project structure/content changes.
+
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation
+      options:
+        - label: I ran `python3 scripts/validate_repo_integrity.py` locally.

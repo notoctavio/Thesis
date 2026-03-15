@@ -1,8 +1,40 @@
-### Example user template template
-### Example user template
+# OS / editor noise
+.DS_Store
+Thumbs.db
 
-# IntelliJ project files
-*.idea
+# IDEs
+.idea/
 *.iml
-out
-gen
+.vscode/
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter artifacts
+.ipynb_checkpoints/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Local session/runtime state
+.copilot/
+
+# Data assets (large/local-only) — keep only folder READMEs in git
+data/*
+!data/README.md
+
+data_test/*
+!data_test/README.md
+
+# Personal planning exports
+/Plan*.csv
