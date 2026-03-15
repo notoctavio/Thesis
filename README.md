@@ -26,7 +26,7 @@ To keep instructions consistent across assistants:
 This repo follows an **Issues-first** workflow for thesis execution.
 
 - Track tasks in GitHub Issues (milestone `Thesis - End of May`)
-- Use the Project dashboard for a board/table view: https://github.com/users/notoctavio/projects/2
+- Use the Project dashboard for a board/table view (also visible in the repo **Projects** tab): https://github.com/users/notoctavio/projects/2
 - Work on a branch → open a PR → ensure required checks pass → merge
 - Log weekly progress + decisions in `docs/plan/`
 

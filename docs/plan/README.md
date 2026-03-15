@@ -10,7 +10,7 @@ This folder is the central place for thesis execution planning and progress trac
 ## GitHub Issues tracking (execution)
 We track day-to-day execution in GitHub Issues so progress is visible and auditable.
 
-- Project dashboard: https://github.com/users/notoctavio/projects/2
+- Project dashboard (also visible in the repo **Projects** tab): https://github.com/users/notoctavio/projects/2
 - Milestone: `Thesis - End of May`
 - Labels:
   - `thesis`
