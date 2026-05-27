@@ -7,15 +7,6 @@ Thumbs.db
 *.iml
 .vscode/
 
-# Assistant/local automation state
-.codex/
-docs/ai/
-docs/superpowers/
-AGENTS.md
-CLAUDE.md
-CODEX.md
-GEMINI.md
-
 # Python environments and caches
 .venv/
 venv/

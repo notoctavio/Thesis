@@ -13,12 +13,6 @@ The project is organized as a reproducible data science workflow:
 
 The main thesis benchmark is `clean_benchmark`; `all_eligible` is kept as a stricter stress benchmark, and `nasa_classic_4` is kept for comparison with public NASA battery RUL repositories.
 
-## Governance and Professional Docs
-- `LICENSE`
-- `CONTRIBUTING.md`
-- `SECURITY.md`
-- `CODE_OF_CONDUCT.md`
-
 ## Application
 - `apps/streamlit_app.py`: guided Streamlit thesis demo over saved predictions, metrics, and battery curves. It opens by stating the final thesis framing: SOH-derived RUL is the main approach, while direct RUL is kept as a comparative benchmark. The first tab presents the SOH -> EOL threshold -> derived RUL story, then keeps model comparisons, methodology, and advanced exploration in separate tabs.
 
@@ -50,35 +44,18 @@ excluded.
 - `notebooks/04_soh_capacity_prediction.ipynb`: SOH/capacity prediction and derived RUL analysis.
 - `notebooks/05_sequence_soh_prediction.ipynb`: LSTM and CNN-LSTM sequence comparison for SOH prediction.
 
-## Project Memory
-- `docs/obsidian/`: Obsidian-compatible notes for the final thesis direction, dataset decisions, EOL thresholds, experiment design, results, and demo overview.
-
-## Workflow (recommended)
-This repo follows an **Issues-first** workflow for thesis execution.
-
-- Track tasks in GitHub Issues (milestone `Thesis - End of May`)
-- Use the Project dashboard for a board/table view (also visible in the repo **Projects** tab): https://github.com/users/notoctavio/projects/2
-- Work on a branch → open a PR → ensure required checks pass → merge
-- Log weekly progress + decisions in `docs/plan/`
+## Thesis Notes
+- `docs/obsidian/`: notes for the final thesis direction, dataset decisions, EOL thresholds, experiment design, results, and demo overview.
 
 ## Lightweight Automation
 - Local integrity command: `python3 scripts/validate_repo_integrity.py`
 - Local tests: `.venv/bin/python -m unittest discover -s tests -v`
 - CI uses `VALIDATE_DATASETS=0` so cloud checks validate repo wiring/docs without requiring local datasets.
 - CI workflow: `.github/workflows/repo-integrity.yml` (runs on push and pull request)
-- PR auto-assign workflow: `.github/workflows/auto-assign-pr-author.yml` (assigns PR opener automatically)
-- Task template: `.github/ISSUE_TEMPLATE/project-task.yml`
-- PR checklist template: `.github/pull_request_template.md`
 
 ## Git Hygiene
-- `.gitignore` excludes local artifacts, assistant/editor state, trained model binaries, and heavy dataset contents.
+- `.gitignore` excludes local artifacts, editor state, trained model binaries, and heavy dataset contents.
 - `.gitattributes` enforces consistent line endings and marks binary/data artifacts appropriately.
-
-## Planning
-- `docs/plan/README.md`
-- `docs/plan/thesis-roadmap.md`
-- `docs/plan/weekly-log-template.md`
-- `docs/plan/decision-log.md`
 
 ## Dataset Tracking
 - `data_test/DATASET_MANIFEST.csv` is the lightweight dataset inventory (source/location/scope/license notes).
