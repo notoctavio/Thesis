@@ -6,6 +6,9 @@ This folder is the central place for thesis execution planning and progress trac
 - `thesis-roadmap.md`: high-level milestones and deliverables
 - `weekly-log-template.md`: weekly execution log template
 - `decision-log.md`: important technical decisions and rationale
+- `research-synthesis.md`: dataset, article, repository, and modeling-direction memory
+- `../obsidian/`: Obsidian-compatible project memory for the final thesis direction
+- `../superpowers/plans/`: implementation plans for larger work chunks
 
 ## GitHub Issues tracking (execution)
 We track day-to-day execution in GitHub Issues so progress is visible and auditable.
@@ -39,3 +42,7 @@ Use `weekly-log-template.md` as the template and link the relevant GitHub issues
 
 ## Usage rule
 When a new sprint/phase starts, update `thesis-roadmap.md` first, then log execution details in weekly logs and close the relevant GitHub issues.
+
+When a new paper, repository, dataset fact, or modeling direction becomes important, update `research-synthesis.md` so the project memory remains versioned and reusable.
+
+When a final project decision needs to remain easy to browse in Obsidian, update the matching `docs/obsidian/*.md` note as well.

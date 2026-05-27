@@ -1,0 +1,28 @@
+{
+  "seed": 7,
+  "strategy": "GroupShuffleSplit by battery_id",
+  "test_size": 0.2,
+  "val_size_of_trainval": 0.25,
+  "train_batteries": [
+    "B0005",
+    "B0006",
+    "B0018",
+    "B0034",
+    "B0042",
+    "B0043",
+    "B0045",
+    "B0048",
+    "B0056"
+  ],
+  "validation_batteries": [
+    "B0047",
+    "B0054",
+    "B0055"
+  ],
+  "test_batteries": [
+    "B0007",
+    "B0036",
+    "B0044",
+    "B0046"
+  ]
+}

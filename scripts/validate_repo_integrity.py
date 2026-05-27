@@ -21,26 +21,32 @@ def main() -> int:
     validate_datasets = os.getenv("VALIDATE_DATASETS", "1").lower() not in {"0", "false", "no"}
 
     required_files = [
-        ROOT / "docs/ai/RULES.md",
-        ROOT / "AGENTS.md",
-        ROOT / "GEMINI.md",
-        ROOT / "CLAUDE.md",
-        ROOT / "CODEX.md",
         ROOT / "README.md",
+        ROOT / "apps/streamlit_app.py",
+        ROOT / "src/config.py",
+        ROOT / "src/artifacts.py",
+        ROOT / "src/prediction.py",
+        ROOT / "src/reporting.py",
+        ROOT / "tests/test_artifacts.py",
+        ROOT / "tests/test_prediction.py",
+        ROOT / "tests/test_streamlit_narrative.py",
+        ROOT / "requirements.txt",
+        ROOT / "artifacts/README.md",
+        ROOT / "artifacts/features/battery_cycle_features_v2.csv",
+        ROOT / "artifacts/metrics/all_model_test_comparison.csv",
+        ROOT / "artifacts/metrics/soh_all_model_test_comparison.csv",
+        ROOT / "artifacts/predictions/baseline_test_predictions.csv",
+        ROOT / "artifacts/predictions/sequence_test_predictions.csv",
+        ROOT / "artifacts/predictions/soh_all_test_predictions.csv",
+        ROOT / "artifacts/splits/modeling_scenarios_v1.json",
     ]
     for file_path in required_files:
         all_ok &= check(file_path.exists(), "Required file exists", str(file_path.relative_to(ROOT)))
 
-    canonical_ref = "docs/ai/RULES.md"
-    for adapter in ["AGENTS.md", "GEMINI.md", "CLAUDE.md", "CODEX.md"]:
-        adapter_path = ROOT / adapter
-        content = adapter_path.read_text(encoding="utf-8") if adapter_path.exists() else ""
-        all_ok &= check(canonical_ref in content, "Adapter references canonical rules", adapter)
-
     readme_text = (ROOT / "README.md").read_text(encoding="utf-8") if (ROOT / "README.md").exists() else ""
     all_ok &= check(
-        "AI Assistant Documentation Convention" in readme_text,
-        "README documents AI convention",
+        "Final Project Direction" in readme_text and "Application" in readme_text,
+        "README documents project direction and app",
         "README.md",
     )
 

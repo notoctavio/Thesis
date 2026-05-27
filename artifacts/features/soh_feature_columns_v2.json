@@ -1,0 +1,43 @@
+{
+  "target_col": "soh",
+  "feature_cols": [
+    "ambient_temperature",
+    "cycle_index",
+    "d_time_duration",
+    "d_voltage_mean",
+    "d_voltage_std",
+    "d_voltage_min",
+    "d_voltage_max",
+    "d_voltage_slope",
+    "d_current_mean",
+    "d_current_std",
+    "d_current_min",
+    "d_current_max",
+    "d_temperature_mean",
+    "d_temperature_std",
+    "d_temperature_max",
+    "d_temperature_slope",
+    "d_energy_wh",
+    "d_charge_ah",
+    "c_time_duration",
+    "c_voltage_mean",
+    "c_current_mean",
+    "c_temperature_mean",
+    "imp_Re",
+    "imp_Rct",
+    "imp_age_hours",
+    "prev_soh",
+    "prev_soh_delta1",
+    "prev_soh_rollmean5",
+    "prev_soh_rollstd5",
+    "prev_soh_slope5"
+  ],
+  "leaky_features_excluded": [
+    "cap_ratio_delta1",
+    "cap_ratio_rollmean5",
+    "cap_ratio_rollstd5",
+    "cap_ratio_slope5",
+    "capacity_ah_clean",
+    "capacity_ratio"
+  ]
+}

@@ -7,6 +7,15 @@ Thumbs.db
 *.iml
 .vscode/
 
+# Assistant/local automation state
+.codex/
+docs/ai/
+docs/superpowers/
+AGENTS.md
+CLAUDE.md
+CODEX.md
+GEMINI.md
+
 # Python environments and caches
 .venv/
 venv/
@@ -20,6 +29,32 @@ __pycache__/
 
 # Jupyter artifacts
 .ipynb_checkpoints/
+
+# Generated experiment artifacts
+# Keep lightweight CSV/JSON artifacts needed to run the public Streamlit demo.
+# Keep trained models, generated figures, and ad-hoc outputs local-only.
+artifacts/*
+!artifacts/README.md
+!artifacts/features/
+artifacts/features/*
+!artifacts/features/battery_cycle_features_v2.csv
+!artifacts/features/*_columns_v2.json
+!artifacts/metrics/
+artifacts/metrics/*
+!artifacts/metrics/*.csv
+!artifacts/metrics/*.json
+!artifacts/predictions/
+artifacts/predictions/*
+!artifacts/predictions/*.csv
+!artifacts/splits/
+artifacts/splits/*
+!artifacts/splits/*.json
+!artifacts/tables/
+artifacts/tables/*
+!artifacts/tables/*.csv
+
+# Local Obsidian app configuration
+docs/obsidian/.obsidian/
 
 # Logs and temporary files
 *.log
