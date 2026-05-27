@@ -1,0 +1,7 @@
+scenario,model,best_epoch,best_val_RMSE
+all_eligible,LSTM,4,0.056834058792985476
+all_eligible,CNN_LSTM,28,0.05947744738194272
+clean_benchmark,LSTM,38,0.019711212205569918
+clean_benchmark,CNN_LSTM,37,0.02058097622976798
+nasa_classic_4,LSTM,40,0.013929193051021738
+nasa_classic_4,CNN_LSTM,3,0.052408770134733246

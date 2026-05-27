@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "strategy": "Fixed battery split",
+  "train_batteries": [
+    "B0005",
+    "B0006"
+  ],
+  "validation_batteries": [
+    "B0018"
+  ],
+  "test_batteries": [
+    "B0007"
+  ]
+}
