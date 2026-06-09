@@ -60,7 +60,7 @@ def main() -> int:
         cleaned_root = Path(
             os.getenv(
                 "SOURCE_DATA_ROOT",
-                str(ROOT / "data/raw/cleaned_dataset"),
+                str(ROOT / "data/source/cleaned_nasa"),
             )
         )
         cleaned_data = cleaned_root / "data"

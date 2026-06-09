@@ -14,7 +14,7 @@ experiments, tests, and Streamlit demo.
 
 ## Local-Only Source Data
 
-Raw and cleaned NASA source datasets are intentionally not tracked in git. If
-the processed feature table must be regenerated, place the local source dataset
-under a local-only folder such as `data/raw/cleaned_dataset/` and rerun the
-notebooks or preprocessing workflow.
+Raw and cleaned NASA source datasets are intentionally not tracked in git. The
+local source dataset used to regenerate the processed feature table should live
+under `data/source/cleaned_nasa/`; then rerun the notebooks or preprocessing
+workflow.

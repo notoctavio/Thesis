@@ -14,7 +14,7 @@ The project is organized as a reproducible data science workflow:
 The main thesis benchmark is `clean_benchmark`; `all_eligible` is kept as a stricter stress benchmark, and `nasa_classic_4` is kept for comparison with public NASA battery RUL repositories.
 
 ## Application
-- `apps/streamlit_app.py`: guided Streamlit thesis demo over saved predictions, metrics, and battery curves. It opens by stating the final thesis framing: SOH-derived RUL is the main approach, while direct RUL is kept as a comparative benchmark. The first tab presents the SOH -> EOL threshold -> derived RUL story, then keeps model comparisons, methodology, and advanced exploration in separate tabs.
+- `apps/streamlit_app.py`: guided Streamlit thesis demo over saved predictions, metrics, and battery curves. It opens by stating the final thesis framing: RUL derived from SOH is the main approach, while direct RUL is kept as a comparative benchmark. The first tab presents the SOH -> EOL threshold -> derived RUL story, then keeps model comparisons, methodology, and advanced exploration in separate tabs.
 
 Run locally:
 
