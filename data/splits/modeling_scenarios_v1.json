@@ -36,7 +36,7 @@
       "B0055",
       "B0056"
     ],
-    "split_path": "artifacts/splits/battery_split_all_eligible_v1.json",
+    "split_path": "data/splits/battery_split_all_eligible_v1.json",
     "split": {
       "seed": 42,
       "strategy": "GroupShuffleSplit by battery_id",
@@ -103,7 +103,7 @@
       "B0055",
       "B0056"
     ],
-    "split_path": "artifacts/splits/battery_split_clean_benchmark_v1.json",
+    "split_path": "data/splits/battery_split_clean_benchmark_v1.json",
     "split": {
       "seed": 7,
       "strategy": "GroupShuffleSplit by battery_id",
@@ -141,7 +141,7 @@
       "B0007",
       "B0018"
     ],
-    "split_path": "artifacts/splits/battery_split_nasa_classic_4_v1.json",
+    "split_path": "data/splits/battery_split_nasa_classic_4_v1.json",
     "split": {
       "seed": 42,
       "strategy": "Fixed battery split",

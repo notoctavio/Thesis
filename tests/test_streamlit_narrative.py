@@ -32,12 +32,15 @@ class StreamlitNarrativeTests(unittest.TestCase):
         )
 
         expected_fragments = [
-            "Abordarea principala a lucrarii este SOH-derived RUL",
-            "Abordare principala: SOH -> prag EOL -> RUL derivat",
+            "Abordarea principală a lucrării este RUL derivat din SOH",
+            "Abordare principală: SOH -> prag EOL -> RUL derivat",
             "Benchmark comparativ: RUL direct",
-            "De ce SOH-derived RUL?",
-            "RMSE: penalizeaza erorile mari",
-            "Aceasta zona este pentru verificari tehnice",
+            "De ce RUL derivat din SOH?",
+            "RMSE: penalizează erorile mari",
+            "Această zonă este pentru verificări tehnice",
+            "Clean benchmark",
+            "R²",
+            "Dataset: NASA Li-ion Battery Aging",
         ]
         for fragment in expected_fragments:
             with self.subTest(fragment=fragment):

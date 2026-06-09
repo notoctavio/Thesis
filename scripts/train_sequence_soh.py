@@ -30,10 +30,11 @@ LR = 1e-3
 WEIGHT_DECAY = 1e-4
 
 ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
 ARTIFACTS = ROOT / "artifacts"
-FEATURE_TABLE = ARTIFACTS / "features" / "battery_cycle_features_v2.csv"
-SOH_FEATURES = ARTIFACTS / "features" / "soh_feature_columns_v2.json"
-SCENARIOS_PATH = ARTIFACTS / "splits" / "modeling_scenarios_v1.json"
+FEATURE_TABLE = DATA / "processed" / "battery_cycle_features_v2.csv"
+SOH_FEATURES = DATA / "processed" / "soh_feature_columns_v2.json"
+SCENARIOS_PATH = DATA / "splits" / "modeling_scenarios_v1.json"
 MODEL_DIR = ARTIFACTS / "models"
 METRICS_DIR = ARTIFACTS / "metrics"
 PRED_DIR = ARTIFACTS / "predictions"

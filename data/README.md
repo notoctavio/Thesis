@@ -1,12 +1,20 @@
 # Data Directory
 
-This directory is intended to house the final, processed, and feature-engineered datasets used for training and evaluating RUL models.
+This directory contains the public, model-ready data required by the thesis
+experiments, tests, and Streamlit demo.
 
-## 🚀 Status
-- This directory is currently empty.
-- Experimental and raw data can be found in `data_test/`.
-- Once features are finalized, they will be stored here in a format suitable for high-performance training (e.g., `.pkl`, `.h5`, or `.pt`).
+## Tracked Structure
 
-## 📁 Expected Structure
-- `processed/`: Features ready for model consumption.
-- `splits/`: Train/test/validation split information.
+- `processed/battery_cycle_features_v2.csv`: final cycle-level feature table
+  derived from the cleaned NASA battery dataset.
+- `processed/*_feature_columns_v2.json`: feature column definitions used by
+  the classical ML and SOH models.
+- `splits/*.json`: train/validation/test battery split definitions and
+  modeling scenarios.
+
+## Local-Only Source Data
+
+Raw and cleaned NASA source datasets are intentionally not tracked in git. If
+the processed feature table must be regenerated, place the local source dataset
+under a local-only folder such as `data/raw/cleaned_dataset/` and rerun the
+notebooks or preprocessing workflow.

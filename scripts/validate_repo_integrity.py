@@ -18,7 +18,10 @@ def check(condition: bool, title: str, details: str) -> bool:
 
 def main() -> int:
     all_ok = True
-    validate_datasets = os.getenv("VALIDATE_DATASETS", "1").lower() not in {"0", "false", "no"}
+    validate_source_data = os.getenv(
+        "VALIDATE_SOURCE_DATA",
+        os.getenv("VALIDATE_DATASETS", "0"),
+    ).lower() in {"1", "true", "yes"}
 
     required_files = [
         ROOT / "README.md",
@@ -32,13 +35,16 @@ def main() -> int:
         ROOT / "tests/test_streamlit_narrative.py",
         ROOT / "requirements.txt",
         ROOT / "artifacts/README.md",
-        ROOT / "artifacts/features/battery_cycle_features_v2.csv",
+        ROOT / "data/README.md",
+        ROOT / "data/processed/battery_cycle_features_v2.csv",
+        ROOT / "data/processed/baseline_feature_columns_v2.json",
+        ROOT / "data/processed/soh_feature_columns_v2.json",
+        ROOT / "data/splits/modeling_scenarios_v1.json",
         ROOT / "artifacts/metrics/all_model_test_comparison.csv",
         ROOT / "artifacts/metrics/soh_all_model_test_comparison.csv",
         ROOT / "artifacts/predictions/baseline_test_predictions.csv",
         ROOT / "artifacts/predictions/sequence_test_predictions.csv",
         ROOT / "artifacts/predictions/soh_all_test_predictions.csv",
-        ROOT / "artifacts/splits/modeling_scenarios_v1.json",
     ]
     for file_path in required_files:
         all_ok &= check(file_path.exists(), "Required file exists", str(file_path.relative_to(ROOT)))
@@ -50,23 +56,19 @@ def main() -> int:
         "README.md",
     )
 
-    if validate_datasets:
-        raw_nasa = ROOT / "data_test/Raw Datasets/Nasa website datasets/5. Battery Data Set"
-        raw_extracted = ROOT / "data_test/Raw Datasets/Datasets raw 5-56/battery_dataset"
-        cleaned_root = ROOT / "data_test/Cleaned Datasets/Datasets 5-56 cleaned/cleaned_dataset"
+    if validate_source_data:
+        cleaned_root = Path(
+            os.getenv(
+                "SOURCE_DATA_ROOT",
+                str(ROOT / "data/raw/cleaned_dataset"),
+            )
+        )
         cleaned_data = cleaned_root / "data"
         metadata = cleaned_root / "metadata.csv"
 
-        all_ok &= check(raw_nasa.exists(), "NASA zip directory exists", str(raw_nasa.relative_to(ROOT)))
-        all_ok &= check(raw_extracted.exists(), "Extracted raw dataset directory exists", str(raw_extracted.relative_to(ROOT)))
-        all_ok &= check(cleaned_root.exists(), "Cleaned dataset directory exists", str(cleaned_root.relative_to(ROOT)))
-        all_ok &= check(cleaned_data.exists(), "Cleaned cycle CSV directory exists", str(cleaned_data.relative_to(ROOT)))
-        all_ok &= check(metadata.exists(), "Metadata file exists", str(metadata.relative_to(ROOT)))
-
-        zip_files = sorted(raw_nasa.glob("*.zip")) if raw_nasa.exists() else []
-        extracted_dirs = sorted([p for p in raw_extracted.iterdir() if p.is_dir()]) if raw_extracted.exists() else []
-        all_ok &= check(len(zip_files) >= 1, "NASA source zips found", str(len(zip_files)))
-        all_ok &= check(len(extracted_dirs) >= 1, "Extracted raw groups found", str(len(extracted_dirs)))
+        all_ok &= check(cleaned_root.exists(), "Cleaned source dataset directory exists", str(cleaned_root))
+        all_ok &= check(cleaned_data.exists(), "Cleaned cycle CSV directory exists", str(cleaned_data))
+        all_ok &= check(metadata.exists(), "Metadata file exists", str(metadata))
 
         csv_files = sorted(cleaned_data.glob("*.csv")) if cleaned_data.exists() else []
         metadata_rows = []
@@ -110,7 +112,7 @@ def main() -> int:
                 f"missing={len(metadata_names - csv_names)}",
             )
     else:
-        all_ok &= check(True, "Data-dependent checks skipped", "VALIDATE_DATASETS=0")
+        all_ok &= check(True, "Source data checks skipped", "set VALIDATE_SOURCE_DATA=1 to enable")
 
     print("\nRepository integrity:", "OK" if all_ok else "FAILED")
     return 0 if all_ok else 1
