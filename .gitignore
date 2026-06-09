@@ -22,14 +22,10 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Generated experiment artifacts
-# Keep lightweight CSV/JSON artifacts needed to run the public Streamlit demo.
-# Keep trained models, generated figures, and ad-hoc outputs local-only.
+# Keep lightweight CSV/JSON outputs needed to run the public Streamlit demo.
+# Keep trained models, generated figures, source features, and ad-hoc outputs local-only.
 artifacts/*
 !artifacts/README.md
-!artifacts/features/
-artifacts/features/*
-!artifacts/features/battery_cycle_features_v2.csv
-!artifacts/features/*_columns_v2.json
 !artifacts/metrics/
 artifacts/metrics/*
 !artifacts/metrics/*.csv
@@ -37,15 +33,12 @@ artifacts/metrics/*
 !artifacts/predictions/
 artifacts/predictions/*
 !artifacts/predictions/*.csv
-!artifacts/splits/
-artifacts/splits/*
-!artifacts/splits/*.json
 !artifacts/tables/
 artifacts/tables/*
 !artifacts/tables/*.csv
 
-# Local Obsidian app configuration
-docs/obsidian/.obsidian/
+# Local project memory and personal notes
+docs/obsidian/
 
 # Logs and temporary files
 *.log
@@ -55,13 +48,19 @@ docs/obsidian/.obsidian/
 # Local session/runtime state
 .copilot/
 
-# Data assets (large/local-only) — keep only folder READMEs in git
+# Public model-ready data plus local-only source datasets
 data/*
 !data/README.md
+!data/processed/
+data/processed/*
+!data/processed/*.csv
+!data/processed/*.json
+!data/splits/
+data/splits/*
+!data/splits/*.json
 
-data_test/*
-!data_test/README.md
-!data_test/DATASET_MANIFEST.csv
+# Historical scratch/source dataset workspace, local-only
+data_test/
 
 # Personal planning exports
 /Plan*.csv

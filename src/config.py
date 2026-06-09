@@ -7,12 +7,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+DATA_DIR = ROOT / "data"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
+DATA_SPLITS_DIR = DATA_DIR / "splits"
+
 ARTIFACTS_DIR = ROOT / "artifacts"
-FEATURES_DIR = ARTIFACTS_DIR / "features"
+FEATURES_DIR = PROCESSED_DATA_DIR
 METRICS_DIR = ARTIFACTS_DIR / "metrics"
 MODELS_DIR = ARTIFACTS_DIR / "models"
 PREDICTIONS_DIR = ARTIFACTS_DIR / "predictions"
-SPLITS_DIR = ARTIFACTS_DIR / "splits"
+SPLITS_DIR = DATA_SPLITS_DIR
 FIGURES_DIR = ARTIFACTS_DIR / "figures"
 
 FEATURES_PATH = FEATURES_DIR / "battery_cycle_features_v2.csv"
@@ -34,22 +38,22 @@ SOH_DERIVED_RUL_TO_80_METRICS_PATH = METRICS_DIR / "soh_derived_rul_to_80_metric
 
 SCENARIO_LABELS = {
     "all_eligible": "Toate bateriile eligibile",
-    "clean_benchmark": "Benchmark curat pentru lucrare",
+    "clean_benchmark": "Clean benchmark",
     "nasa_classic_4": "NASA clasic B0005/B0006/B0007/B0018",
 }
 
 SCENARIO_NOTES = {
     "all_eligible": (
         "Benchmark strict de stres, folosind toate bateriile cu suficiente cicluri "
-        "de descarcare. Este mai dificil si scoate in evidenta eterogenitatea datasetului."
+        "de descărcare. Este mai dificil și scoate în evidență eterogenitatea datasetului."
     ),
     "clean_benchmark": (
-        "Benchmark-ul principal al lucrarii, folosind baterii cu suficiente cicluri "
-        "si degradare coerenta a capacitatii/SOH."
+        "Scenariul principal de raportare, folosind baterii cu suficiente cicluri "
+        "și degradare coerentă a capacității/SOH."
     ),
     "nasa_classic_4": (
-        "Subsetul NASA clasic folosit in multe articole si repository-uri publice. "
-        "Este util pentru comparatie, dar nu reprezinta intregul dataset eterogen."
+        "Subsetul NASA clasic folosit în multe articole și repository-uri publice. "
+        "Este util pentru comparație, dar nu reprezintă întregul dataset eterogen."
     ),
 }
 

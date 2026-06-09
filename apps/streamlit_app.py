@@ -44,16 +44,16 @@ PRIMARY_TASK = config.SOH_TASK
 PRIMARY_DEMO_THRESHOLD = 0.80
 MODEL_FAMILY_LABELS = {
     "baseline": "ML clasic",
-    "sequence": "DL secvential",
+    "sequence": "DL secvențial",
     "Classical ML": "ML clasic",
-    "Sequence DL": "DL secvential",
+    "Sequence DL": "DL secvențial",
 }
 
 
 st.set_page_config(
     page_title="Li-ion Battery RUL",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -64,6 +64,10 @@ def inject_style() -> None:
         .block-container {
             padding-top: 1.75rem;
             max-width: 1180px;
+        }
+        section[data-testid="stSidebar"],
+        div[data-testid="stSidebarCollapsedControl"] {
+            display: none;
         }
         .thesis-note {
             border: 1px solid rgba(47, 111, 115, 0.42);
@@ -88,6 +92,19 @@ def inject_style() -> None:
         }
         div[data-testid="stMetric"] * {
             color: inherit;
+        }
+        .st-key-compact_metric_cards div[data-testid="stMetricLabel"] p {
+            font-size: 0.84rem;
+            line-height: 1.2;
+        }
+        .st-key-compact_metric_cards div[data-testid="stMetricValue"] {
+            font-size: 1.35rem;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+        .st-key-compact_metric_cards div[data-testid="stMetricValue"] > div {
+            font-size: inherit;
+            line-height: inherit;
         }
         div[data-testid="stDataFrame"] {
             border-radius: 8px;
@@ -140,32 +157,46 @@ def default_cycle(curve: pd.DataFrame) -> int:
     return int(round(min_cycle + 0.45 * (max_cycle - min_cycle)))
 
 
-def metric_cards(metrics: dict[str, float | str], task: str) -> None:
+def metric_cards(metrics: dict[str, float | str], task: str, compact: bool = False) -> None:
+    if compact:
+        with st.container(key="compact_metric_cards"):
+            _metric_cards(metrics, task)
+        return
+
+    _metric_cards(metrics, task)
+
+
+def _metric_cards(metrics: dict[str, float | str], task: str) -> None:
     col1, col2, col3 = st.columns(3)
     col1.metric("RMSE", metrics["RMSE"])
     col2.metric("MAE", metrics["MAE"])
-    col3.metric("R2", metrics["R2"])
+    col3.metric("R²", metrics["R2"])
     if task == config.SOH_TASK:
-        st.caption("Pentru SOH, RMSE si MAE sunt erori in unitati SOH. 0.01 inseamna aproximativ 1% sanatate.")
+        st.caption("Pentru SOH, RMSE și MAE sunt erori în unități SOH. 0.01 înseamnă aproximativ 1% sănătate.")
     else:
-        st.caption("Pentru RUL direct, RMSE si MAE sunt exprimate in cicluri ramase.")
+        st.caption("Pentru RUL direct, RMSE și MAE sunt exprimate în cicluri rămase.")
 
 
 def render_metric_explainer() -> None:
     st.caption(
-        "RMSE: penalizeaza erorile mari; MAE: eroarea medie absoluta; "
-        "R2: cat de bine explica modelul variatia datelor."
+        "RMSE: penalizează erorile mari; MAE: eroarea medie absolută; "
+        "R²: cât de bine explică modelul variația datelor."
     )
 
 
-def plot_soh(curve: pd.DataFrame, threshold: float, selected_cycle: int | None = None) -> plt.Figure:
-    fig, ax = plt.subplots(figsize=(10, 4.8))
+def plot_soh(
+    curve: pd.DataFrame,
+    threshold: float,
+    selected_cycle: int | None = None,
+    figsize: tuple[float, float] = (10, 4.8),
+) -> plt.Figure:
+    fig, ax = plt.subplots(figsize=figsize)
     ax.plot(curve["cycle_index"], curve["soh"], label="SOH real", linewidth=2.2, color="#246b75")
     ax.plot(curve["cycle_index"], curve["pred_soh"], label="SOH prezis", linewidth=2.2, color="#c06b2d")
     ax.axhline(threshold, color="#9b2d30", linestyle="--", linewidth=1.6, label=f"Prag EOL {threshold:.0%}")
     if selected_cycle is not None:
         ax.axvline(selected_cycle, color="#56616f", linestyle=":", linewidth=1.5, label="Ciclu selectat")
-    ax.set_xlabel("Ciclu de descarcare")
+    ax.set_xlabel("Ciclu de descărcare")
     ax.set_ylabel("SOH")
     ax.grid(True, alpha=0.25)
     ax.legend(loc="best")
@@ -179,8 +210,8 @@ def plot_direct_rul(curve: pd.DataFrame, selected_cycle: int | None = None) -> p
     ax.plot(curve["cycle_index"], curve["prediction"], label="RUL prezis", linewidth=2.2, color="#c06b2d")
     if selected_cycle is not None:
         ax.axvline(selected_cycle, color="#56616f", linestyle=":", linewidth=1.5, label="Ciclu selectat")
-    ax.set_xlabel("Ciclu de descarcare")
-    ax.set_ylabel("Cicluri ramase")
+    ax.set_xlabel("Ciclu de descărcare")
+    ax.set_ylabel("Cicluri rămase")
     ax.grid(True, alpha=0.25)
     ax.legend(loc="best")
     fig.tight_layout()
@@ -191,12 +222,12 @@ def render_summary_table(summary: dict[str, object]) -> None:
     labels = {
         "battery_id": "Baterie",
         "cycle_index": "Ciclu analizat",
-        "capacity_ah_clean": "Capacitate curatata (Ah)",
-        "target": "Tinta modelului",
-        "true_value": "Valoare reala",
-        "predicted_value": "Valoare prezisa",
-        "absolute_error": "Eroare absoluta",
-        "true_rul_cycles": "RUL real in date",
+        "capacity_ah_clean": "Capacitate curățată (Ah)",
+        "target": "Ținta modelului",
+        "true_value": "Valoare reală",
+        "predicted_value": "Valoare prezisă",
+        "absolute_error": "Eroare absolută",
+        "true_rul_cycles": "RUL real în date",
         "eol_cycle": "Ciclu EOL estimat",
         "remaining_cycles": "RUL derivat",
         "threshold": "Prag EOL",
@@ -214,8 +245,8 @@ def render_summary_table(summary: dict[str, object]) -> None:
             display_value = str(value)
         rows.append(
             {
-                "camp": labels[key],
-                "valoare": display_value,
+                "Câmp": labels[key],
+                "Valoare": display_value,
             }
         )
     st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
@@ -234,7 +265,7 @@ def render_soh_story(
     eol_cycle = derived["eol_cycle"]
 
     if remaining is None:
-        rul_text = "modelul nu vede in curba disponibila o trecere clara sub pragul EOL"
+        rul_text = "modelul nu identifică în curba disponibilă o trecere clară sub pragul EOL"
     else:
         rul_text = f"RUL estimat este de aproximativ {remaining} cicluri, cu EOL la ciclul {eol_cycle}"
 
@@ -242,10 +273,10 @@ def render_soh_story(
         f"""
         <div class="thesis-note">
         <strong>Interpretarea pentru comisie:</strong><br>
-        In scenariul <strong>{scenario_label(scenario)}</strong>, pentru bateria
+        În scenariul <strong>{scenario_label(scenario)}</strong>, pentru bateria
         <strong>{selected["battery_id"]}</strong>, modelul <strong>{model}</strong>
-        estimeaza la ciclul <strong>{current_cycle}</strong> un SOH de
-        <strong>{predicted_soh:.4f}</strong>. Pragul de sfarsit de viata este
+        estimează la ciclul <strong>{current_cycle}</strong> un SOH de
+        <strong>{predicted_soh:.4f}</strong>. Pragul de sfârșit de viață este
         <strong>{threshold:.0%}</strong>, deci {rul_text}.
         </div>
         """,
@@ -258,11 +289,11 @@ def render_direct_story(selected: dict[str, Any], scenario: str, model: str) -> 
         f"""
         <div class="thesis-note">
         <strong>Interpretarea benchmark-ului direct RUL:</strong><br>
-        In scenariul <strong>{scenario_label(scenario)}</strong>, pentru bateria
+        În scenariul <strong>{scenario_label(scenario)}</strong>, pentru bateria
         <strong>{selected["battery_id"]}</strong>, modelul <strong>{model}</strong>
-        estimeaza direct numarul de cicluri ramase. La ciclul
-        <strong>{selected["cycle_index"]}</strong>, valoarea reala este
-        <strong>{selected["true_value"]:.1f}</strong> cicluri, iar predictia este
+        estimează direct numărul de cicluri rămase. La ciclul
+        <strong>{selected["cycle_index"]}</strong>, valoarea reală este
+        <strong>{selected["true_value"]:.1f}</strong> cicluri, iar predicția este
         <strong>{selected["predicted_value"]:.1f}</strong> cicluri.
         </div>
         """,
@@ -289,7 +320,7 @@ def render_metrics_table(metrics: pd.DataFrame, scenario: str, title: str, note:
     st.caption(note)
     table = ranked_metrics(metrics, scenario)
     if table.empty:
-        st.warning("Nu exista metrici salvate pentru selectia curenta.")
+        st.warning("Nu există metrici salvate pentru selecția curentă.")
         return
     display = table.copy()
     if "family" in display.columns:
@@ -302,20 +333,21 @@ def render_metrics_table(metrics: pd.DataFrame, scenario: str, title: str, note:
             "rank": "#",
             "model": "Model",
             "family": "Familie",
+            "R2": "R²",
         }
     )
     best_row = display.iloc[0]
     st.success(
-        f"Model recomandat dupa RMSE: {best_row['Model']} "
-        f"(RMSE={float(best_row['RMSE']):.4f}, R2={float(best_row['R2']):.4f})."
+        f"Model recomandat după RMSE: {best_row['Model']} "
+        f"(RMSE={float(best_row['RMSE']):.4f}, R²={float(best_row['R²']):.4f})."
     )
     st.dataframe(display, width="stretch", hide_index=True)
     render_metric_explainer()
-    if "R2" in display.columns and (display["R2"].astype(float) < 0).any():
+    if "R²" in display.columns and (display["R²"].astype(float) < 0).any():
         st.warning(
-            "Un R2 negativ inseamna ca acel model a generalizat mai slab decat o "
-            "predictie de baza pe split-ul selectat. Il pastram in tabel pentru "
-            "transparenta experimentala, nu ca model recomandat."
+            "Un R² negativ înseamnă că acel model a generalizat mai slab decât o "
+            "predicție de bază pe split-ul selectat. Îl păstrăm în tabel pentru "
+            "transparență experimentală, nu ca model recomandat."
         )
 
     fig, ax = plt.subplots(figsize=(8, 3.2))
@@ -334,11 +366,11 @@ def scenario_table(scenarios: dict[str, Any]) -> pd.DataFrame:
         split = info.get("split", {})
         rows.append(
             {
-                "scenariu": scenario_label(name),
-                "baterii": len(info.get("battery_ids", [])),
-                "antrenare": ", ".join(split.get("train_batteries", [])),
-                "validare": ", ".join(split.get("validation_batteries", [])),
-                "test": ", ".join(split.get("test_batteries", [])),
+                "Scenariu": scenario_label(name),
+                "Baterii": len(info.get("battery_ids", [])),
+                "Antrenare": ", ".join(split.get("train_batteries", [])),
+                "Validare": ", ".join(split.get("validation_batteries", [])),
+                "Test": ", ".join(split.get("test_batteries", [])),
             }
         )
     return pd.DataFrame(rows)
@@ -348,26 +380,26 @@ def render_methodology(scenarios: dict[str, Any]) -> None:
     st.subheader("Workflow-ul proiectului")
     st.markdown(
         """
-        1. Datasetul NASA este citit din varianta curatata CSV.
-        2. Se pastreaza ciclurile de descarcare si se extrag feature-uri pe ciclu.
-        3. Se calculeaza doua tinte: RUL direct si SOH.
-        4. Datele sunt impartite pe baterii, nu pe randuri aleatorii, ca sa evitam scurgerea de informatie intre antrenare si test.
-        5. Se compara modele clasice cu LSTM si CNN-LSTM.
-        6. Demo-ul incarca artefactele salvate si explica predictiile fara reantrenare.
+        1. Datasetul NASA este citit din varianta curățată CSV.
+        2. Se păstrează ciclurile de descărcare și se extrag feature-uri pe ciclu.
+        3. Se calculează două ținte: RUL direct și SOH.
+        4. Datele sunt împărțite pe baterii, nu pe rânduri aleatorii, pentru a evita scurgerea de informație între antrenare și test.
+        5. Se compară modele clasice cu LSTM și CNN-LSTM.
+        6. Demo-ul încarcă artefactele salvate și explică predicțiile fără reantrenare.
         """
     )
 
     st.subheader("Scenarii de evaluare")
     st.dataframe(scenario_table(scenarios), width="stretch", hide_index=True)
 
-    st.subheader("De ce SOH-derived RUL?")
+    st.subheader("De ce RUL derivat din SOH?")
     st.markdown(
         """
-        SOH este indicatorul de sanatate al bateriei si descrie degradarea
-        capacitatii in timp. In literatura, finalul vietii utile este definit
+        SOH este indicatorul de sănătate al bateriei și descrie degradarea
+        capacității în timp. În literatura de specialitate, finalul vieții utile este definit
         printr-un prag EOL, de obicei raportat la capacitate sau SOH. Din acest
-        motiv, abordarea principala a lucrarii este: estimam SOH, alegem pragul
-        EOL, apoi calculam RUL ca numar de cicluri pana la atingerea pragului.
+        motiv, abordarea principală a lucrării este: estimăm SOH, alegem pragul
+        EOL, apoi calculăm RUL ca număr de cicluri până la atingerea pragului.
         """
     )
 
@@ -377,10 +409,10 @@ def render_methodology(scenarios: dict[str, Any]) -> None:
             """
             **RUL derivat din SOH**
 
-            Modelul prezice SOH, adica starea de sanatate a bateriei. RUL se obtine
-            cautand ciclul in care curba SOH prezisa ajunge sub pragul EOL.
-            Aceasta este formularea principala pentru demo. Modelele secventiale
-            SOH sunt antrenate pe schimbarea fata de SOH-ul anterior, iar metricile
+            Modelul prezice SOH, adică starea de sănătate a bateriei. RUL se obține
+            căutând ciclul în care curba SOH prezisă ajunge sub pragul EOL.
+            Aceasta este formularea principală pentru demo. Modelele secvențiale
+            SOH sunt antrenate pe schimbarea față de SOH-ul anterior, iar metricile
             sunt calculate pe SOH-ul reconstruit.
             """
         )
@@ -389,16 +421,16 @@ def render_methodology(scenarios: dict[str, Any]) -> None:
             """
             **RUL direct (benchmark)**
 
-            Modelul prezice direct cate cicluri raman pana la finalul curbei
-            inregistrate. Este util pentru comparatia intre modele, dar este mai
-            sensibil la lungimea curbelor si la diferentele dintre baterii.
+            Modelul prezice direct câte cicluri rămân până la finalul curbei
+            înregistrate. Este util pentru comparația între modele, dar este mai
+            sensibil la lungimea curbelor și la diferențele dintre baterii.
             """
         )
 
     st.info(
         "Scorurile foarte mari pe `nasa_classic_4` sunt corecte pentru acel subset, "
         "dar trebuie prezentate ca benchmark clasic NASA. Pentru generalizare se "
-        "raporteaza separat `clean_benchmark` si `all_eligible`."
+        "raportează separat `clean_benchmark` și `all_eligible`."
     )
 
 
@@ -409,9 +441,9 @@ def render_advanced_explorer(
     direct_metrics: pd.DataFrame,
     soh_metrics: pd.DataFrame,
 ) -> None:
-    st.subheader("Explorare avansata")
+    st.subheader("Explorare avansată")
     st.caption(
-        "Aceasta zona este pentru verificari tehnice; demo-ul principal ramane SOH-derived RUL."
+        "Această zonă este pentru verificări tehnice; demo-ul principal rămâne RUL derivat din SOH."
     )
 
     task = st.radio(
@@ -444,7 +476,7 @@ def render_advanced_explorer(
         pred_col = "pred_soh"
 
     if not models:
-        st.warning("Nu exista modele pentru selectia curenta.")
+        st.warning("Nu există modele pentru selecția curentă.")
         return
 
     model = st.selectbox(
@@ -509,8 +541,8 @@ def render_demo_controls(
     soh_predictions: pd.DataFrame,
     soh_metrics: pd.DataFrame,
 ) -> dict[str, Any]:
-    st.markdown("**Selectie demo**")
-    st.caption("Selectia de mai jos controleaza graficul, metricile si interpretarea RUL din acest tab.")
+    st.markdown("**Selecție demo**")
+    st.caption("Selecția de mai jos controlează graficul, metricile și interpretarea RUL din acest tab.")
 
     scenario_col, model_col, battery_col = st.columns([1.35, 1.05, 0.8])
     with scenario_col:
@@ -568,11 +600,11 @@ def render_demo_controls(
 
     st.caption(scenario_note(demo_scenario))
     if demo_recommended_model:
-        st.caption(f"Model recomandat dupa RMSE pentru scenariul selectat: {demo_recommended_model}")
+        st.caption(f"Model recomandat după RMSE pentru scenariul selectat: {demo_recommended_model}")
     if demo_scenario == PRIMARY_SCENARIO:
         st.caption(
-            "Nota: NASA clasic este documentat cu prag 70%, dar demo-ul porneste pe 80% "
-            "ca prag practic BMS/EV pentru a arata RUL in curba disponibila."
+            "Notă: NASA clasic este documentat cu prag 70%, dar demo-ul pornește pe 80% "
+            "ca prag practic BMS/EV pentru a arăta RUL în curba disponibilă."
         )
 
     return {
@@ -594,36 +626,34 @@ soh_metrics = load_soh_metrics()
 scenarios_info = load_scenarios()
 scenarios = list(scenarios_info.keys())
 
-st.title("Predictia duratei de viata utile ramase pentru baterii Li-ion")
-st.caption("Demo Streamlit pentru explicarea workflow-ului de data science: date NASA, modele ML, SOH si RUL.")
-st.info(
-    "Aplicatia compara predictia directa RUL cu estimarea SOH urmata de derivarea RUL "
-    "pe baza pragului EOL. Abordarea principala a lucrarii este SOH-derived RUL."
+st.title("Predicția duratei de viață utile rămase pentru baterii Li-ion")
+st.caption(
+    "Dataset: NASA Li-ion Battery Aging. Demo Streamlit pentru explicarea workflow-ului "
+    "de data science: modele ML, SOH și RUL."
 )
-
-st.sidebar.header("Demo recomandat")
-st.sidebar.caption(
-    "Demo-ul recomandat foloseste NASA clasic si RUL derivat din SOH. Controalele sunt in tabul Demo ghidat."
+st.info(
+    "Aplicația compară predicția directă RUL cu estimarea SOH urmată de derivarea RUL "
+    "pe baza pragului EOL. Abordarea principală a lucrării este RUL derivat din SOH."
 )
 
 tab_demo, tab_results, tab_methodology, tab_advanced = st.tabs(
-    ["Demo ghidat", "Rezultate modele", "Metodologie", "Explorare avansata"]
+    ["Demo ghidat", "Rezultate modele", "Metodologie", "Explorare avansată"]
 )
 
 with tab_demo:
     st.subheader("De la degradarea bateriei la RUL")
     col1, col2, col3 = st.columns(3)
-    col1.markdown("**1. Date**\n\nCicluri NASA de incarcare/descarcare pentru baterii Li-ion.")
-    col2.markdown("**2. Model**\n\nModelul prezice SOH, adica sanatatea bateriei la fiecare ciclu.")
-    col3.markdown("**3. RUL**\n\nRUL este numarul de cicluri pana cand SOH ajunge la pragul EOL.")
+    col1.markdown("**1. Date**\n\nCicluri NASA de încărcare/descărcare pentru baterii Li-ion.")
+    col2.markdown("**2. Model**\n\nModelul prezice SOH, adică sănătatea bateriei la fiecare ciclu.")
+    col3.markdown("**3. RUL**\n\nRUL este numărul de cicluri până când SOH ajunge la pragul EOL.")
 
     st.markdown(
         """
         <div class="thesis-note">
-        <strong>Abordare principala: SOH -> prag EOL -> RUL derivat.</strong><br>
-        <strong>Mesajul principal:</strong> nu incercam doar sa desenam o curba,
-        ci estimam cand bateria ajunge la sfarsitul duratei utile de viata.
-        Pentru demo, SOH este prezis mai intai, apoi RUL este derivat din pragul EOL.
+        <strong>Abordare principală: SOH -> prag EOL -> RUL derivat.</strong><br>
+        <strong>Mesajul principal:</strong> nu urmărim doar forma unei curbe,
+        ci estimăm când bateria ajunge la sfârșitul duratei utile de viață.
+        Pentru demo, SOH este prezis mai întâi, apoi RUL este derivat din pragul EOL.
         </div>
         """,
         unsafe_allow_html=True,
@@ -646,7 +676,7 @@ with tab_demo:
         st.markdown(f"**Model:** {demo_model}")
         st.markdown(f"**Prag EOL:** {demo_threshold:.0%} SOH")
         demo_metric = format_metric_row(metric_row(soh_metrics, demo_scenario, demo_model))
-        metric_cards(demo_metric, PRIMARY_TASK)
+        metric_cards(demo_metric, PRIMARY_TASK, compact=True)
 
     demo_selected = cycle_summary(demo_curve, demo_cycle, task="soh")
     demo_derived = derived_rul_from_soh_curve(
@@ -660,7 +690,7 @@ with tab_demo:
     cards[1].metric("SOH prezis", f"{demo_selected['predicted_value']:.4f}")
     cards[2].metric("Eroare SOH", f"{demo_selected['absolute_error']:.4f}")
     if demo_derived["remaining_cycles"] is None:
-        cards[3].metric("RUL derivat", "in afara curbei")
+        cards[3].metric("RUL derivat", "în afara curbei")
     else:
         cards[3].metric("RUL derivat", f"{demo_derived['remaining_cycles']} cicluri")
 
@@ -671,7 +701,7 @@ with tab_demo:
 
 with tab_results:
     result_scenario = st.selectbox(
-        "Scenariu pentru comparatia modelelor",
+        "Scenariu pentru comparația modelelor",
         scenarios,
         index=default_index(scenarios, "clean_benchmark"),
         format_func=scenario_label,
@@ -682,15 +712,15 @@ with tab_results:
     render_metrics_table(
         soh_metrics,
         result_scenario,
-        "Abordare principala: SOH / RUL derivat",
-        "Aceasta este directia recomandata: prezicem sanatatea bateriei si derivam RUL din pragul EOL.",
+        "Abordare principală: SOH / RUL derivat",
+        "Aceasta este direcția recomandată: prezicem sănătatea bateriei și derivăm RUL din pragul EOL.",
     )
     st.divider()
     render_metrics_table(
         direct_metrics,
         result_scenario,
         "Benchmark comparativ: RUL direct",
-        "Aceasta abordare este pastrata pentru comparatie. Rezultatele pot fi mai slabe deoarece targetul depinde de lungimea curbei si de eterogenitatea datasetului.",
+        "Această abordare este păstrată pentru comparație. Rezultatele pot fi mai slabe deoarece ținta depinde de lungimea curbei și de eterogenitatea datasetului.",
     )
 
 with tab_methodology:

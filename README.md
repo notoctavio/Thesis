@@ -45,7 +45,9 @@ excluded.
 - `notebooks/05_sequence_soh_prediction.ipynb`: LSTM and CNN-LSTM sequence comparison for SOH prediction.
 
 ## Thesis Notes
-- `docs/obsidian/`: notes for the final thesis direction, dataset decisions, EOL thresholds, experiment design, results, and demo overview.
+- The public repository keeps the thesis-facing overview in this README and
+  in the folder READMEs. Personal planning notes and local project memory files
+  are not part of the submitted source package.
 
 ## Lightweight Automation
 - Local integrity command: `python3 scripts/validate_repo_integrity.py`
@@ -58,10 +60,13 @@ excluded.
 - `.gitattributes` enforces consistent line endings and marks binary/data artifacts appropriately.
 
 ## Dataset Tracking
-- `data_test/DATASET_MANIFEST.csv` is the lightweight dataset inventory (source/location/scope/license notes).
-- Raw and cleaned datasets are local-only. To regenerate the full experiment
-  artifacts, place the NASA data under the documented `data_test/` structure
-  and rerun the notebooks/scripts.
+- `data/processed/` contains the final model-ready feature table and feature
+  column definitions used by the experiments.
+- `data/splits/` contains the battery split/scenario definitions used by the
+  Streamlit demo, tests, and training scripts.
+- Raw and cleaned NASA source datasets are local-only. They are not tracked in
+  git because they are large and should be obtained from the original dataset
+  sources before regenerating the processed feature table.
 
 ## Local Dependencies
 Install runtime dependencies into the project virtual environment:
