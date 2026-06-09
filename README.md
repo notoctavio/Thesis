@@ -64,9 +64,10 @@ excluded.
   column definitions used by the experiments.
 - `data/splits/` contains the battery split/scenario definitions used by the
   Streamlit demo, tests, and training scripts.
-- Raw and cleaned NASA source datasets are local-only. They are not tracked in
-  git because they are large and should be obtained from the original dataset
-  sources before regenerating the processed feature table.
+- Raw and cleaned NASA source datasets are local-only. The cleaned source copy
+  used for regeneration should live at `data/source/cleaned_nasa/`. It is not
+  tracked in git because it is large and should be obtained from the original
+  dataset sources before regenerating the processed feature table.
 
 ## Local Dependencies
 Install runtime dependencies into the project virtual environment:

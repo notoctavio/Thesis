@@ -9,10 +9,13 @@ Tracked:
 - `predictions/*.csv`
 - `tables/*.csv`
 
-Not tracked:
+Not stored in `artifacts/`:
 
 - processed/model-ready input data under `data/processed/`
 - split/scenario definitions under `data/splits/`
+
+Local-only:
+
 - trained model files under `models/`
 - generated figures under `figures/`
 - raw or cleaned source datasets
