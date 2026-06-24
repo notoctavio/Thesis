@@ -39,7 +39,7 @@ class InferenceResult:
 def load_model_manifest() -> dict[str, Any]:
     """Load the public model manifest."""
 
-    return artifacts.load_model_manifest()
+    return artifacts.load_json(config.MODEL_MANIFEST_PATH)
 
 
 def available_model_ids(manifest: dict[str, Any] | None = None) -> list[str]:

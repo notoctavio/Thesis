@@ -8,6 +8,20 @@ from src import artifacts, config
 
 
 class PublicInferenceArtifactTests(unittest.TestCase):
+    def test_manifest_loader_does_not_require_artifacts_wrapper(self) -> None:
+        from src import inference
+
+        original = getattr(artifacts, "load_model_manifest", None)
+        if original is not None:
+            delattr(artifacts, "load_model_manifest")
+        try:
+            manifest = inference.load_model_manifest()
+        finally:
+            if original is not None:
+                setattr(artifacts, "load_model_manifest", original)
+
+        self.assertIn("models", manifest)
+
     def test_public_inference_artifacts_exist(self) -> None:
         self.assertTrue(config.EXAMPLE_INFERENCE_CSV_PATH.exists(), config.EXAMPLE_INFERENCE_CSV_PATH)
         self.assertTrue(config.MODEL_MANIFEST_PATH.exists(), config.MODEL_MANIFEST_PATH)
