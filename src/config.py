@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 DATA_DIR = ROOT / "data"
+EXAMPLES_DIR = DATA_DIR / "examples"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 DATA_SPLITS_DIR = DATA_DIR / "splits"
 
@@ -20,7 +21,11 @@ SPLITS_DIR = DATA_SPLITS_DIR
 FIGURES_DIR = ARTIFACTS_DIR / "figures"
 
 FEATURES_PATH = FEATURES_DIR / "battery_cycle_features_v2.csv"
+BASELINE_FEATURE_COLUMNS_PATH = FEATURES_DIR / "baseline_feature_columns_v2.json"
+SOH_FEATURE_COLUMNS_PATH = FEATURES_DIR / "soh_feature_columns_v2.json"
 SCENARIOS_PATH = SPLITS_DIR / "modeling_scenarios_v1.json"
+EXAMPLE_INFERENCE_CSV_PATH = EXAMPLES_DIR / "b0007_soh_inference_example.csv"
+MODEL_MANIFEST_PATH = MODELS_DIR / "model_manifest.json"
 
 BASELINE_PREDICTIONS_PATH = PREDICTIONS_DIR / "baseline_test_predictions.csv"
 SEQUENCE_PREDICTIONS_PATH = PREDICTIONS_DIR / "sequence_test_predictions.csv"

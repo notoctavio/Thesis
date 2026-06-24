@@ -26,6 +26,12 @@ __pycache__/
 # Keep trained models, generated figures, source features, and ad-hoc outputs local-only.
 artifacts/*
 !artifacts/README.md
+!artifacts/models/
+artifacts/models/*
+!artifacts/models/model_manifest.json
+!artifacts/models/soh_clean_benchmark_randomforest_trainval.joblib
+!artifacts/models/soh_nasa_classic_4_randomforest_trainval.joblib
+!artifacts/models/soh_all_eligible_histgradientboosting_trainval.joblib
 !artifacts/metrics/
 artifacts/metrics/*
 !artifacts/metrics/*.csv
@@ -51,6 +57,9 @@ docs/obsidian/
 # Public model-ready data plus local-only source datasets
 data/*
 !data/README.md
+!data/examples/
+data/examples/*
+!data/examples/*.csv
 !data/processed/
 data/processed/*
 !data/processed/*.csv
@@ -64,3 +73,6 @@ data_test/
 
 # Personal planning exports
 /Plan*.csv
+
+# Local writing/figure generation helpers
+scripts/generate_literature_figures.py

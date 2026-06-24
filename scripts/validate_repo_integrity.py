@@ -28,18 +28,23 @@ def main() -> int:
         ROOT / "apps/streamlit_app.py",
         ROOT / "src/config.py",
         ROOT / "src/artifacts.py",
+        ROOT / "src/inference.py",
         ROOT / "src/prediction.py",
         ROOT / "src/reporting.py",
         ROOT / "tests/test_artifacts.py",
+        ROOT / "tests/test_inference.py",
         ROOT / "tests/test_prediction.py",
         ROOT / "tests/test_streamlit_narrative.py",
         ROOT / "requirements.txt",
+        ROOT / "REPRODUCIBILITY.md",
         ROOT / "artifacts/README.md",
         ROOT / "data/README.md",
+        ROOT / "data/examples/b0007_soh_inference_example.csv",
         ROOT / "data/processed/battery_cycle_features_v2.csv",
         ROOT / "data/processed/baseline_feature_columns_v2.json",
         ROOT / "data/processed/soh_feature_columns_v2.json",
         ROOT / "data/splits/modeling_scenarios_v1.json",
+        ROOT / "artifacts/models/model_manifest.json",
         ROOT / "artifacts/metrics/all_model_test_comparison.csv",
         ROOT / "artifacts/metrics/soh_all_model_test_comparison.csv",
         ROOT / "artifacts/predictions/baseline_test_predictions.csv",
@@ -51,10 +56,31 @@ def main() -> int:
 
     readme_text = (ROOT / "README.md").read_text(encoding="utf-8") if (ROOT / "README.md").exists() else ""
     all_ok &= check(
-        "Final Project Direction" in readme_text and "Application" in readme_text,
+        "Final Project Direction" in readme_text
+        and "Application" in readme_text
+        and "Reproducibility" in readme_text,
         "README documents project direction and app",
         "README.md",
     )
+
+    manifest_path = ROOT / "artifacts/models/model_manifest.json"
+    if manifest_path.exists():
+        import json
+
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        model_entries = manifest.get("models", {})
+        all_ok &= check(
+            len(model_entries) >= 3,
+            "Public model manifest has expected entries",
+            str(sorted(model_entries.keys())),
+        )
+        for model_id, model_info in model_entries.items():
+            model_path = ROOT / model_info.get("path", "")
+            all_ok &= check(
+                model_path.exists(),
+                "Public model file exists",
+                f"{model_id}: {model_path.relative_to(ROOT) if model_path.exists() else model_path}",
+            )
 
     if validate_source_data:
         cleaned_root = Path(

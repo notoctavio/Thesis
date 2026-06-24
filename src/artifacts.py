@@ -105,6 +105,10 @@ def load_soh_derived_rul_metrics() -> pd.DataFrame:
     return load_csv(config.SOH_DERIVED_RUL_TO_80_METRICS_PATH)
 
 
+def load_model_manifest() -> dict[str, Any]:
+    return load_json(config.MODEL_MANIFEST_PATH)
+
+
 def available_scenarios() -> list[str]:
     """Return scenarios in the saved split artifact."""
 
@@ -123,5 +127,13 @@ def validate_required_artifacts() -> list[Path]:
         config.SOH_ALL_MODEL_TEST_COMPARISON_PATH
         if config.SOH_ALL_MODEL_TEST_COMPARISON_PATH.exists()
         else config.SOH_TEST_METRICS_PATH,
+        config.EXAMPLE_INFERENCE_CSV_PATH,
+        config.MODEL_MANIFEST_PATH,
     ]
-    return [_require_path(path) for path in required]
+    manifest = load_json(config.MODEL_MANIFEST_PATH) if config.MODEL_MANIFEST_PATH.exists() else {}
+    model_paths = [
+        config.ROOT / model_info["path"]
+        for model_info in manifest.get("models", {}).values()
+        if "path" in model_info
+    ]
+    return [_require_path(path) for path in [*required, *model_paths]]
