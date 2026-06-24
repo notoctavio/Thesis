@@ -20,7 +20,7 @@ import streamlit as st
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src import artifacts, config  # noqa: E402
+from src import artifacts, config, inference  # noqa: E402
 from src.prediction import (  # noqa: E402
     available_batteries,
     available_models,
@@ -93,16 +93,19 @@ def inject_style() -> None:
         div[data-testid="stMetric"] * {
             color: inherit;
         }
-        .st-key-compact_metric_cards div[data-testid="stMetricLabel"] p {
+        .st-key-compact_metric_cards div[data-testid="stMetricLabel"] p,
+        .st-key-csv_metric_cards div[data-testid="stMetricLabel"] p {
             font-size: 0.84rem;
             line-height: 1.2;
         }
-        .st-key-compact_metric_cards div[data-testid="stMetricValue"] {
+        .st-key-compact_metric_cards div[data-testid="stMetricValue"],
+        .st-key-csv_metric_cards div[data-testid="stMetricValue"] {
             font-size: 1.35rem;
             line-height: 1.2;
             white-space: nowrap;
         }
-        .st-key-compact_metric_cards div[data-testid="stMetricValue"] > div {
+        .st-key-compact_metric_cards div[data-testid="stMetricValue"] > div,
+        .st-key-csv_metric_cards div[data-testid="stMetricValue"] > div {
             font-size: inherit;
             line-height: inherit;
         }
@@ -157,9 +160,14 @@ def default_cycle(curve: pd.DataFrame) -> int:
     return int(round(min_cycle + 0.45 * (max_cycle - min_cycle)))
 
 
-def metric_cards(metrics: dict[str, float | str], task: str, compact: bool = False) -> None:
+def metric_cards(
+    metrics: dict[str, float | str],
+    task: str,
+    compact: bool = False,
+    key: str = "compact_metric_cards",
+) -> None:
     if compact:
-        with st.container(key="compact_metric_cards"):
+        with st.container(key=key):
             _metric_cards(metrics, task)
         return
 
@@ -196,6 +204,20 @@ def plot_soh(
     ax.axhline(threshold, color="#9b2d30", linestyle="--", linewidth=1.6, label=f"Prag EOL {threshold:.0%}")
     if selected_cycle is not None:
         ax.axvline(selected_cycle, color="#56616f", linestyle=":", linewidth=1.5, label="Ciclu selectat")
+    ax.set_xlabel("Ciclu de descărcare")
+    ax.set_ylabel("SOH")
+    ax.grid(True, alpha=0.25)
+    ax.legend(loc="best")
+    fig.tight_layout()
+    return fig
+
+
+def plot_inference_soh(curve: pd.DataFrame, threshold: float) -> plt.Figure:
+    fig, ax = plt.subplots(figsize=(10, 4.8))
+    if "soh" in curve.columns:
+        ax.plot(curve["cycle_index"], curve["soh"], label="SOH real", linewidth=2.2, color="#246b75")
+    ax.plot(curve["cycle_index"], curve["pred_soh"], label="SOH prezis", linewidth=2.2, color="#c06b2d")
+    ax.axhline(threshold, color="#9b2d30", linestyle="--", linewidth=1.6, label=f"Prag EOL {threshold:.0%}")
     ax.set_xlabel("Ciclu de descărcare")
     ax.set_ylabel("SOH")
     ax.grid(True, alpha=0.25)
@@ -385,7 +407,7 @@ def render_methodology(scenarios: dict[str, Any]) -> None:
         3. Se calculează două ținte: RUL direct și SOH.
         4. Datele sunt împărțite pe baterii, nu pe rânduri aleatorii, pentru a evita scurgerea de informație între antrenare și test.
         5. Se compară modele clasice cu LSTM și CNN-LSTM.
-        6. Demo-ul încarcă artefactele salvate și explică predicțiile fără reantrenare.
+        6. Demo-ul încarcă artefactele salvate, iar tabul CSV folosește modele SOH publicate pentru inferență fără reantrenare.
         """
     )
 
@@ -536,6 +558,137 @@ def render_advanced_explorer(
         st.dataframe(curve[available_cols], width="stretch", height=320)
 
 
+def render_csv_inference_tab() -> None:
+    st.subheader("Predicție CSV pe date încărcate")
+    st.caption(
+        "Această zonă rulează un model SOH publicat în repository pe un CSV model-ready. "
+        "Nu reantrenează modelele și nu descarcă datasetul Kaggle în timpul execuției."
+    )
+
+    manifest = inference.load_model_manifest()
+    model_ids = inference.available_model_ids(manifest)
+    default_model = manifest.get("default_model_id", model_ids[0])
+    model_id = st.selectbox(
+        "Model SOH publicat",
+        model_ids,
+        index=default_index(model_ids, default_model),
+        format_func=lambda value: inference.get_model_info(value, manifest)["display_name"],
+        key="csv_inference_model",
+    )
+    model_info = inference.get_model_info(model_id, manifest)
+    threshold = st.slider(
+        "Prag EOL SOH",
+        0.60,
+        0.90,
+        float(model_info.get("default_threshold", 0.80)),
+        0.01,
+        key="csv_inference_threshold",
+    )
+
+    with st.expander("Formatul CSV așteptat"):
+        feature_cols = inference.load_soh_feature_columns()
+        st.markdown(
+            """
+            CSV-ul trebuie să fie la nivel de ciclu și să conțină feature-urile model-ready
+            folosite la antrenarea modelelor SOH. Fișierul exemplu inclus în repository este:
+            """
+        )
+        st.code(str(config.EXAMPLE_INFERENCE_CSV_PATH.relative_to(config.ROOT)))
+        st.caption(f"Număr de feature-uri SOH necesare: {len(feature_cols)}.")
+        st.dataframe(pd.DataFrame({"Coloane necesare": feature_cols}), width="stretch", height=220)
+
+    uploaded = st.file_uploader(
+        "Încarcă CSV model-ready",
+        type=["csv"],
+        key="csv_inference_uploader",
+    )
+
+    if uploaded is None:
+        st.info("Nu a fost încărcat un fișier. Aplicația folosește exemplul public B0007 inclus în repository.")
+        input_frame = inference.load_example_frame()
+        source_label = "data/examples/b0007_soh_inference_example.csv"
+    else:
+        try:
+            input_frame = pd.read_csv(uploaded)
+        except Exception as exc:
+            st.error(f"Fișierul CSV nu a putut fi citit: {exc}")
+            return
+        source_label = uploaded.name
+
+    try:
+        result = inference.predict_soh_from_frame(input_frame, model_id=model_id, threshold=threshold)
+    except ValueError as exc:
+        st.error(str(exc))
+        missing = inference.missing_feature_columns(input_frame, inference.load_soh_feature_columns())
+        if missing:
+            st.dataframe(pd.DataFrame({"Coloane lipsă": missing}), width="stretch", hide_index=True)
+        return
+
+    st.markdown(
+        f"""
+        <div class="thesis-note">
+        <strong>Predicție live:</strong><br>
+        Sursa datelor este <strong>{source_label}</strong>, modelul selectat este
+        <strong>{result.model_display_name}</strong>, iar pragul EOL este
+        <strong>{result.threshold:.0%}</strong>. Aplicația estimează SOH pe fiecare ciclu
+        și derivă RUL din prima trecere sub prag.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    cards = st.columns(4)
+    cards[0].metric("Rânduri analizate", f"{len(result.predictions)}")
+    cards[1].metric("Baterie", result.battery_id)
+    cards[2].metric("Ciclu EOL estimat", "în afara curbei" if result.eol_cycle is None else str(result.eol_cycle))
+    cards[3].metric(
+        "RUL de la primul ciclu",
+        "în afara curbei"
+        if result.remaining_cycles_at_first_cycle is None
+        else f"{result.remaining_cycles_at_first_cycle} cicluri",
+    )
+
+    if "abs_soh_error" in result.predictions.columns:
+        error = result.predictions["abs_soh_error"].astype(float)
+        y_true = result.predictions["soh"].astype(float)
+        y_pred = result.predictions["pred_soh"].astype(float)
+        sse = float(((y_true - y_pred) ** 2).sum())
+        sst = float(((y_true - y_true.mean()) ** 2).sum())
+        r2_value = 1.0 - (sse / sst) if sst > 0 else 0.0
+        metric_cards(
+            {
+                "RMSE": f"{float((error.pow(2).mean()) ** 0.5):.4f}",
+                "MAE": f"{float(error.mean()):.4f}",
+                "R2": f"{r2_value:.4f}",
+            },
+            config.SOH_TASK,
+            compact=True,
+            key="csv_metric_cards",
+        )
+
+    st.pyplot(plot_inference_soh(result.predictions, result.threshold), width="stretch")
+
+    display_cols = [
+        "battery_id",
+        "cycle_index",
+        "soh",
+        "pred_soh",
+        "abs_soh_error",
+        "rul_cycles",
+        "eol_threshold",
+        "model_id",
+        "scenario",
+    ]
+    available_cols = [col for col in display_cols if col in result.predictions.columns]
+    st.dataframe(result.predictions[available_cols], width="stretch", height=320)
+    st.download_button(
+        "Descarcă predicțiile CSV",
+        data=result.predictions.to_csv(index=False).encode("utf-8"),
+        file_name="soh_predictions.csv",
+        mime="text/csv",
+    )
+
+
 def render_demo_controls(
     scenarios: list[str],
     soh_predictions: pd.DataFrame,
@@ -636,8 +789,8 @@ st.info(
     "pe baza pragului EOL. Abordarea principală a lucrării este RUL derivat din SOH."
 )
 
-tab_demo, tab_results, tab_methodology, tab_advanced = st.tabs(
-    ["Demo ghidat", "Rezultate modele", "Metodologie", "Explorare avansată"]
+tab_demo, tab_csv, tab_results, tab_methodology, tab_advanced = st.tabs(
+    ["Demo ghidat", "Predicție CSV", "Rezultate modele", "Metodologie", "Explorare avansată"]
 )
 
 with tab_demo:
@@ -698,6 +851,9 @@ with tab_demo:
 
     with st.expander("Detalii pentru ciclul selectat"):
         render_summary_table({**demo_selected, **demo_derived})
+
+with tab_csv:
+    render_csv_inference_tab()
 
 with tab_results:
     result_scenario = st.selectbox(

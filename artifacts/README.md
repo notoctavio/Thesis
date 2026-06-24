@@ -1,13 +1,15 @@
 # Lightweight Demo Artifacts
 
-This directory contains generated CSV/JSON outputs needed to run the public
-Streamlit thesis demo and local tests.
+This directory contains generated outputs needed to run the public Streamlit
+thesis demo, local tests, and selected CSV inference workflow.
 
 Tracked:
 
 - `metrics/*.csv` and `metrics/*.json`
 - `predictions/*.csv`
 - `tables/*.csv`
+- `models/model_manifest.json`
+- selected public SOH `.joblib` models used by the `Predicție CSV` tab
 
 Not stored in `artifacts/`:
 
@@ -16,7 +18,7 @@ Not stored in `artifacts/`:
 
 Local-only:
 
-- trained model files under `models/`
+- non-public trained model files under `models/`
 - generated figures under `figures/`
 - raw or cleaned source datasets
 

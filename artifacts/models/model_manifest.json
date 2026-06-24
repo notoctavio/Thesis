@@ -1,0 +1,33 @@
+{
+  "version": "2026-06-24",
+  "task": "soh",
+  "feature_config": "data/processed/soh_feature_columns_v2.json",
+  "example_csv": "data/examples/b0007_soh_inference_example.csv",
+  "default_model_id": "nasa_classic_4_randomforest",
+  "models": {
+    "nasa_classic_4_randomforest": {
+      "display_name": "NASA clasic - RandomForest SOH",
+      "scenario": "nasa_classic_4",
+      "model_name": "RandomForest",
+      "path": "artifacts/models/soh_nasa_classic_4_randomforest_trainval.joblib",
+      "default_threshold": 0.8,
+      "note": "Model SOH pentru subsetul NASA clasic B0005/B0006/B0007/B0018; B0007 este bateria de test."
+    },
+    "clean_benchmark_randomforest": {
+      "display_name": "Clean benchmark - RandomForest SOH",
+      "scenario": "clean_benchmark",
+      "model_name": "RandomForest",
+      "path": "artifacts/models/soh_clean_benchmark_randomforest_trainval.joblib",
+      "default_threshold": 0.8,
+      "note": "Model SOH principal pentru scenariul de raportare clean_benchmark."
+    },
+    "all_eligible_histgradientboosting": {
+      "display_name": "Toate bateriile eligibile - HistGradientBoosting SOH",
+      "scenario": "all_eligible",
+      "model_name": "HistGradientBoosting",
+      "path": "artifacts/models/soh_all_eligible_histgradientboosting_trainval.joblib",
+      "default_threshold": 0.8,
+      "note": "Model SOH compact pentru scenariul strict all_eligible."
+    }
+  }
+}
