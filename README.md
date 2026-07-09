@@ -72,7 +72,7 @@ patrickfleith/nasa-battery-dataset
 ## Thesis Notes
 - The public repository keeps the thesis-facing overview in this README and
   in the folder READMEs. Personal planning notes and local project memory files
-  are not part of the submitted source package.
+  are not part of the public source package.
 
 ## Lightweight Automation
 - Local integrity command: `python scripts/validate_repo_integrity.py`

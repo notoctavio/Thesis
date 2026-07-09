@@ -128,7 +128,7 @@ The public repository includes only the lightweight processed data, saved
 metrics/predictions, and selected SOH models required by the app. Full local
 training may create additional models that remain ignored by git.
 
-## 7. Submission-Oriented Notes
+## 7. Project Notes
 
 - The thesis app demonstrates a reproducible workflow, not an industrial BMS.
 - The main thesis output is RUL derived from predicted SOH and an EOL threshold.

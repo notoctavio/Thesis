@@ -294,7 +294,7 @@ def render_soh_story(
     st.markdown(
         f"""
         <div class="thesis-note">
-        <strong>Interpretarea pentru comisie:</strong><br>
+        <strong>Interpretarea rezultatului:</strong><br>
         În scenariul <strong>{scenario_label(scenario)}</strong>, pentru bateria
         <strong>{selected["battery_id"]}</strong>, modelul <strong>{model}</strong>
         estimează la ciclul <strong>{current_cycle}</strong> un SOH de
